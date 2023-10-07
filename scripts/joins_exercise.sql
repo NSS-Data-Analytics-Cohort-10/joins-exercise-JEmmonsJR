@@ -92,3 +92,19 @@ LIMIT 1;
 --ANSWERS: 419, The Dark Knight
 
 --7. Which have a higher average rating, movies which are over two hours long or movies which are under two hours?
+
+SELECT
+	AVG(r.imdb_rating)
+FROM rating AS r
+INNER JOIN specs AS S
+USING(movie_id)
+WHERE s.length_in_min < 120;
+
+SELECT
+	AVG(r.imdb_rating)
+FROM rating AS r
+INNER JOIN specs AS S
+USING(movie_id)
+WHERE s.length_in_min > 120;
+
+--ANSWER: Movies over 2 hours w/ a 7.26. Movies under 2 hours have a 6.92
