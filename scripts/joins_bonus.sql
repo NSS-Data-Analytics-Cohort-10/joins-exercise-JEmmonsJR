@@ -32,13 +32,21 @@ WHERE film_title LIKE '% 2';
 
 --c. Bonus: This method will not work for movies like “Harry Potter and the Deathly Hallows: Part 2”, where the original title should be “Harry Potter and the Deathly Hallows: Part 1”. Modify your query to fix these issues.
 
-SELECT
+SELECT *
+FROM (SELECT
 	*,
 	REPLACE(REPLACE(TRIM(TRAILING ' 2' FROM film_title), 'Part', 'Part 1'), 'Vol.', 'Vol. 1') AS original_title
-FROM specs
-WHERE film_title LIKE '% 2';
+	FROM specs
+	WHERE film_title LIKE '% 2') AS specs2;
 
 --d. Now, build off of the query you wrote for the previous part to pull in worldwide revenue for both the original movie and its sequel. Do sequels tend to make more in revenue? Hint: You will likely need to perform a self-join on the specs table in order to get the movie_id values for both the original films and their sequels. Bonus: A common data entry problem is trailing whitespace. In this dataset, it shows up in the film_title field, where the movie “Deadpool” is recorded as “Deadpool “. One way to fix this problem is to use the TRIM function. Incorporate this into your query to ensure that you are matching as many sequels as possible.
+
+SELECT 8
+FROM (SELECT
+	*,
+	REPLACE(REPLACE(TRIM(TRAILING ' 2' FROM film_title), 'Part', 'Part 1'), 'Vol.', 'Vol. 1') AS original_title
+	FROM specs
+	WHERE film_title LIKE '% 2') AS specs2;;
 
 --3. Sometimes movie series can be found by looking for titles that contain a colon. For example, Transformers: Dark of the Moon is part of the Transformers series of films.
 
