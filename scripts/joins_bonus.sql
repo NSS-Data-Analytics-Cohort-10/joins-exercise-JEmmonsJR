@@ -34,7 +34,7 @@ WHERE film_title LIKE '% 2';
 
 SELECT
 	*,
-	TRIM(TRAILING ' 2' FROM film_title) AS original_title
+	REPLACE(REPLACE(TRIM(TRAILING ' 2' FROM film_title), 'Part', 'Part 1'), 'Vol.', 'Vol. 1') AS original_title
 FROM specs
 WHERE film_title LIKE '% 2';
 
