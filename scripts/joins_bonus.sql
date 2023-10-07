@@ -1,12 +1,42 @@
 --1. Find the total worldwide gross and average imdb rating by decade. Then alter your query so it returns JUST the second highest average imdb rating and its decade. This should result in a table with just one row.
 
+SELECT
+	decade,
+	SUM(rev.worldwide_gross) AS tot_gross,
+	AVG(rat.imdb_rating) AS avg_imdb
+FROM (SELECT FLOOR(specs.release_year / 10) * 10 AS decade, movie_id
+	  FROM specs)
+INNER JOIN revenue AS rev
+USING(movie_id)
+INNER JOIN rating AS rat
+USING(movie_id)
+GROUP BY decade
+ORDER BY avg_imdb DESC
+LIMIT 1 OFFSET 1;
+
 --2. Our goal in this question is to compare the worldwide gross for movies compared to their sequels.
 
 --a. Start by finding all movies whose titles end with a space and then the number 2.
 
+SELECT *
+FROM specs
+WHERE film_title LIKE '% 2';
+
 --b. For each of these movies, create a new column showing the original film’s name by removing the last two characters of the film title. For example, for the film “Cars 2”, the original title would be “Cars”. Hint: You may find the string functions listed in Table 9-10 of https://www.postgresql.org/docs/current/functions-string.html to be helpful for this.
 
+SELECT
+	*,
+	TRIM(TRAILING ' 2' FROM film_title) AS original_title
+FROM specs
+WHERE film_title LIKE '% 2';
+
 --c. Bonus: This method will not work for movies like “Harry Potter and the Deathly Hallows: Part 2”, where the original title should be “Harry Potter and the Deathly Hallows: Part 1”. Modify your query to fix these issues.
+
+SELECT
+	*,
+	TRIM(TRAILING ' 2' FROM film_title) AS original_title
+FROM specs
+WHERE film_title LIKE '% 2';
 
 --d. Now, build off of the query you wrote for the previous part to pull in worldwide revenue for both the original movie and its sequel. Do sequels tend to make more in revenue? Hint: You will likely need to perform a self-join on the specs table in order to get the movie_id values for both the original films and their sequels. Bonus: A common data entry problem is trailing whitespace. In this dataset, it shows up in the film_title field, where the movie “Deadpool” is recorded as “Deadpool “. One way to fix this problem is to use the TRIM function. Incorporate this into your query to ensure that you are matching as many sequels as possible.
 
